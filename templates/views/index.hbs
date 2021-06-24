@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      
+
+    {{>header}}
+
+    <!-- Fonts -->
+
+  
+    <link rel="icon" href="Favicon.png">
+
+
+
+    <!-- Bootstrap CSS -->
+
+    <title>ExamTaker</title>
+</head>
+
+<body>
+
+
+
+    {{>navbar}}
+    {{!-- </main> --}}
+    
+    <div class="container">
+        <div class="row">
+            <p class="justify-content-center">
+                <h4>Welcome to {{exam.name}} exam</h1>
+            </p>
+        </div>
+        
+        
+        <form action="/submitAns" method="POST">
+        {{#each ques}}
+  <div class="form-group">
+    <label for="{{this.question}}" id="question{{@index}}">{{this.question}}</label>
+    <input type="text" name="answers" class="form-control" id="answer{{@index}}" placeholder="name@example.com"/>
+  </div>
+  {{/each}}
+  <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+
+</form>
+    </div>
+
+{{!-- speech logic     --}}
+    <script src="script.js"></script>
+    
+    <script>
+
+    artyom.say(`Hello, welcome to {{exam.name}} assessment page. There are {{quesLen}} questions.  For reading out questions, say Jarvis question number. To answer a question, say jarvis answer question number followed by answer`);
+
+    artyom.redirectRecognizedTextOutput((recognized,isFinal) => {
+    if(isFinal){
+        // Nothing
+        console.log(recognized);
+    }else{
+        console.log(recognized);
+    }
+});
+
+    var settings = {
+    continuous:true, // Don't stop never because i have https connection
+    onResult:function(text){
+        // Show the Recognized text in the console
+        console.log("Recognized text: ", text);
+        ansSpace+=text;
+        $('#answers').val(ansSpace);
+
+    },
+    onStart:function(){
+        console.log("Dictation started by the user");
+    },
+    onEnd:function(){
+        {{!-- alert("Dictation stopped by the user"); --}}
+        artyom.restart().then;
+        console.log(artyom);
+
+
+    }
+};
+
+    
+    artyom.on(["1","2",
+    "3","4","5","6",
+    "7","8","9","10"]).then(function(i) {
+        
+        console.log(i);
+        switch (i) {
+        case 0:
+            var val = document.getElementById("question0").htmlFor;
+            {{!-- console.log(val); --}}
+            artyom.say(val);
+        break;
+        case 1:
+            var val = document.getElementById(`question1`).htmlFor;
+            artyom.say(val);
+        break; 
+        case 2:
+            var val = document.getElementById(`question2`).htmlFor;
+            artyom.say(val);
+        break;           
+        case 3:
+            var val = document.getElementById(`question3`).htmlFor;
+            artyom.say(val);
+        break;
+        case 4:
+            var val = document.getElementById(`question4`).htmlFor;
+            artyom.say(val);
+        break;
+        case 5:
+            var val = document.getElementById(`question5`).htmlFor;
+            artyom.say(val);
+        break;
+        case 6:
+            var val = document.getElementById(`question6`).htmlFor;
+            artyom.say(val);
+        break;
+        case 7:
+            var val = document.getElementById(`question7`).htmlFor;
+            artyom.say(val);
+        break;
+        case 8:
+            var val = document.getElementById(`question8`).htmlFor;
+            artyom.say(val);
+        break;
+        case 9:
+            var val = document.getElementById(`question9`).htmlFor;
+            artyom.say(val);
+        break;
+    }
+    })
+
+    artyom.addCommands({
+    //The smart property of the command needs to be true
+    smart:true,
+    indexes: ["answer first *","answer second *","answer 3 *","answer 4th *"
+    ,"answer v *","answer vi *","answer 7th *","answer 8th *"
+    ,"answer 9th *","answer 10th *"],
+    action: function(i, wildcard){
+        // Speak alterable value
+        switch (i) {
+        case 0:
+            
+            artyom.say("answer 1");
+            let ans1 = document.getElementById("answer0");
+            ans1.value = wildcard;
+
+        break;
+        case 1:
+            artyom.say("answer 2");
+            let ans2 = document.getElementById("answer1");
+            ans2.value = wildcard;
+              
+        break;
+        case 2:
+            
+            artyom.say("answer 3");
+            {{!-- let ans1 = document.getElementById("answer0");
+            ans1.value = wildcard; --}}
+
+        break;
+        case 3:
+            artyom.say("answer 4");
+            {{!-- let ans2 = document.getElementById("answer1");
+            ans2.value = wildcard; --}}
+              
+        break; 
+        case 4:
+            
+            artyom.say("answer 5");
+            {{!-- let ans1 = document.getElementById("answer0");
+            ans1.value = wildcard; --}}
+
+        break;
+        case 5:
+            artyom.say("answer 6");
+            {{!-- let ans2 = document.getElementById("answer1");
+            ans2.value = wildcard; --}}
+              
+        break;  
+        case 6:
+            
+            artyom.say("answer 7");
+            {{!-- let ans1 = document.getElementById("answer0");
+            ans1.value = wildcard; --}}
+
+        break;
+        case 7:
+            artyom.say("answer 8");
+            {{!-- let ans2 = document.getElementById("answer1");
+            ans2.value = wildcard; --}}
+              
+        break; 
+        case 8:
+            
+            artyom.say("answer 9");
+            {{!-- let ans1 = document.getElementById("answer0");
+            ans1.value = wildcard; --}}
+
+        break;
+        case 9:
+            artyom.say("answer 10");
+            {{!-- let ans2 = document.getElementById("answer1");
+            ans2.value = wildcard; --}}
+              
+        break; 
+       
+    }
+    
+    }
+});
+
+artyom.on(["finish"]).then(function(i){
+    document.getElementById("submit").click();
+    artyom("Your response has been submitted");
+});
+
+    
+  
+</script>
+
+
+</body>
+
+</html>
